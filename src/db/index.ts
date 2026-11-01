@@ -17,6 +17,9 @@ export class MemorizeDB extends Dexie {
       sessions: '++id, documentId, gameType, completedAt',
       settings: '++id',
     });
+    this.version(2).stores({
+      documents: '++id, title, createdAt, updatedAt',
+    });
   }
 }
 

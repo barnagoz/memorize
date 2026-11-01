@@ -8,9 +8,15 @@ export function useDocuments() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const docs = await db.documents.orderBy('updatedAt').reverse().toArray();
-    setDocuments(docs);
-    setLoading(false);
+    try {
+      const docs = await db.documents.toArray();
+      docs.sort((a, b) => (b.updatedAt || b.createdAt || 0) - (a.updatedAt || a.createdAt || 0));
+      setDocuments(docs);
+    } catch (err) {
+      console.error('Failed to load documents:', err);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
